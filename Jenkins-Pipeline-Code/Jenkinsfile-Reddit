@@ -41,10 +41,11 @@ pipeline{
         stage("Docker Build & Push"){
             steps{
                 script{
-                   withDockerRegistry(credentialsId: 'docker', toolName: 'docker'){
-                       sh "docker build -t reddit ."
-                       sh "docker tag reddit manideepm777/reddit:${BUILD_NUMBER} "
-                       sh "docker push manideepm777/reddit:${BUILD_NUMBER} "
+                    withCredentials([usernamePassword(credentialsId: 'docker', passwordVariable: 'PASS', usernameVariable: 'USER', toolName: 'docker')]) {
+                        sh "docker build -t reddit ."
+                        sh "echo $PASS | docker login -u $USER --password-stdin"
+                        sh "docker tag reddit manideepm777/reddit:${BUILD_NUMBER}"
+                        sh "docker push manideepm777/reddit:${BUILD_NUMBER}"
                     }
                 }
             }
