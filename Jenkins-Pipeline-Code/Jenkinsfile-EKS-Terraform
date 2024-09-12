@@ -7,6 +7,9 @@ properties([
 
 pipeline {
     agent any
+    environment {
+         PATH = "$PATH:/usr/bin"
+    }
     stages {
         stage('Checkout from Git') {
             steps {
