@@ -53,7 +53,7 @@ pipeline{
         stage("Docker Build & Push"){
             steps{
                 script{
-                    withCredentials([usernamePassword(credentialsId: 'docker', passwordVariable: 'PASS', usernameVariable: 'USER', toolName: 'docker')]) {
+                    withCredentials([sshUserPrivateKey(credentialsId: 'docker', keyFileVariable: 'SSH_KEY')]) {
                         sh "docker build -t reddit ."
                         sh "echo $PASS | docker login -u $USER --password-stdin"
                         sh "docker tag reddit manideepm777/reddit:${BUILD_NUMBER}"
