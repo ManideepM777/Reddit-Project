@@ -46,10 +46,18 @@ pipeline{
         }
 
         stage('TRIVY FS SCAN') {
+            environment {
+                TRIVY_USERNAME = 'ManideepM777'
+                TRIVY_PASSWORD = credentials('githubcred') // Store your PAT in Jenkins credentials
+            }
             steps {
-                sh "trivy fs . > trivyfs.txt"
+                sh """
+                    echo "Running Trivy scan with authentication..."
+                    trivy fs --timeout 5m . > trivyfs.txt
+                """
             }
         }
+        
         stage("Docker Build & Push"){
             steps{
                 script{
